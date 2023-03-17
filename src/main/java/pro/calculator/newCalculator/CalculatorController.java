@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequestMapping(path = "/calculator")
 @RestController()
 public class CalculatorController {
     private final CalculatorService calculatorService;
@@ -12,35 +13,46 @@ public class CalculatorController {
     public CalculatorController(CalculatorService calculatorService) {
         this.calculatorService = calculatorService;
     }
-//    @RequestMapping(path = "/calculator")
 
-    @GetMapping(path ="/calculator")
+    @GetMapping(path = "/calculator")
     public String hello() {
         return " Добро пожаловать в калькулятор ";
     }
 
-    @GetMapping(path ="/calculator/plus")
-    public String plus(@RequestParam ("num1") String numOne, @RequestParam ("num2") String numTwo) {
-        return calculatorService.plus(Integer.parseInt(numOne), Integer.parseInt(numTwo));
-    }
-//    public String plus(@RequestParam (required = false)String numOne, @RequestParam (required = false)String numTwo) {
-//        if(numOne == null|| numTwo==null||numOne.isEmpty()||numTwo.isEmpty()){
-//            return "Введите два параметра";
-//        }
-//        return calculatorService.plus(Integer.parseInt(numOne), Integer.parseInt(numTwo));
-//    }
-    @GetMapping(path ="/calculator/minus")
-    public String minus (@RequestParam ("num1") String numOne, @RequestParam ("num2") String numTwo){
-        return calculatorService.minus(Integer.parseInt(numOne), Integer.parseInt(numTwo));
-    }
-    @GetMapping( path = "/calculator/multiply")
-    public String multiply (@RequestParam ("num1") String nunOne, @RequestParam ("num2") String numTwo){
-        return calculatorService.multiply(Integer.parseInt(nunOne), Integer.parseInt(numTwo));
-    }
-    @GetMapping(path =  "/calculator/divide")
-    public String divide( @RequestParam ("num1") String numOne, @RequestParam ("num2") String numTwo){
-        return calculatorService.divide(Integer.parseInt(numOne), Integer.parseInt(numTwo));
+    @GetMapping(path = "/plus")
+    public String plus(@RequestParam("num1") String numOne, @RequestParam("num2") String numTwo) {
+        if (numOne.isBlank() || numTwo.isBlank()) {
+            return " Пустых значений не должно быть !";
+        }
+        return numOne + " + " + numTwo + " = " + calculatorService.plus(Integer.parseInt(numOne), Integer.parseInt(numTwo));
     }
 
+    @GetMapping(path = "/minus")
+    public String minus(@RequestParam("num1") String numOne, @RequestParam("num2") String numTwo) {
+        if (numOne.isBlank() || numTwo.isBlank()) {
+            return " Ошибка. Пустых значений не должно быть ! ";
+        }
+        return numOne + " - " + numTwo + " = " + calculatorService.minus(Integer.parseInt(numOne), Integer.parseInt(numTwo));
+    }
+
+    @GetMapping(path = "/multiply")
+    public String multiply(@RequestParam("num1") String numOne, @RequestParam("num2") String numTwo) {
+        if (numOne.isBlank() || numTwo.isBlank()) {
+            return " Ошибка. Пустых значений не должно быть ! ";
+        }
+        return numOne + " * " + numTwo + " = " + calculatorService.multiply(Integer.parseInt(numOne), Integer.parseInt(numTwo));
+    }
+
+    @GetMapping(path = "/divide")
+    public String divide(@RequestParam("num1") String numOne, @RequestParam("num2") String numTwo) {
+        if (numOne.isBlank() || numTwo.isBlank()) {
+            return " Введите два параметра";
+        }
+        if (numTwo.equals("0")) {
+            return " Ошибка. Делить на 0 нельзя! ";
+        }
+        return numOne + " / " + numTwo + " = " + calculatorService.divide(Integer.parseInt(numOne), Integer.parseInt(numTwo));
+    }
 
 }
+
